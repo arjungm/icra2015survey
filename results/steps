@@ -1,0 +1,45 @@
+export SURVEY=/home/amenon/icra2015survey
+export RESULT=$SURVEY/results
+
+LOAD WAREHOUSE
+roslaunch pr2_moveit_config warehouse.launch moveit_warehouse_database_path:=$RESULT/db1
+
+LOAD ROBOT
+roslaunch pr2_moveit_config planning_context.launch load_robot_description:=true
+
+IMPORT SCENES
+rosrun moveit_ros_warehouse moveit_warehouse_import_from_text --host 127.0.0.1 --port 33829 --scene $SURVEY/scenes/drawer1.scene
+
+DESIGN QUERIES
+roslaunch moveit_recorder designer.launch save_dir:=$RESULT
+
+IMPORT QUERIES
+rosrun moveit_ros_warehouse moveit_warehouse_import_from_text --host 127.0.0.1 --port 33829 --queries $RESULT/queries/drawer1.queries
+
+GENERATE PLANS
+rosrun video_survey create_cfg --template $RESULT/cfg/drawer1.template
+...
+roslaunch moveit_recorder run_benchmark_ompl.launch cfg:=CFGFILE
+...
+
+ADD VIEWS + INSPECT PLANS
+roslaunch moveit_recorder viewpoint_recorder.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+
+RECORD PLANS
+roslaunch moveit_recorder playback.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+
+PROCESS VIDEOS
+roslaunch video_survey split_video.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+
+CREATE IMAGES
+roslaunch video_survey start_goal_play.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+
+UPLOAD VIDEOS
+roslaunch video_survey upload.launch user:=arjun.menon@sri.com pass:=keratin3450 save_dir:=/home/amenon/icra2015survey/pr2_results/ regex:=split
+
+UPLOAD IMAGES
+./google-oauth2.sh refresh 1/sSoj6P4aDV577OpjwpD0fTgoeH-t5byaKYfTVA_BlYU
+roslaunch video_survey image_upload.launch token:=ya29.bwAYJHBXQMwUbxwAAADp_Sn-wLBL-ilQ11-PResvkoWD1sx76D-44Rsc6yQ3ig regex:=startimg save_dir:=/home/amenon/icra2015survey/pr2_results
+roslaunch video_survey image_upload.launch token:=ya29.bwAYJHBXQMwUbxwAAADp_Sn-wLBL-ilQ11-PResvkoWD1sx76D-44Rsc6yQ3ig regex:=goalimg save_dir:=/home/amenon/icra2015survey/pr2_results
+
+CREATE SURVEY
