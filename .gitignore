@@ -1,4 +1,7 @@
 pr2_results/
 pr2_db/
 *.swp
+*.ogv
+*.jpg
+*.cfg
 icra2015paper/

@@ -24,10 +24,10 @@ roslaunch moveit_recorder run_benchmark_ompl.launch cfg:=CFGFILE
 ...
 
 ADD VIEWS + INSPECT PLANS
-roslaunch moveit_recorder viewpoint_recorder.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+roslaunch moveit_recorder viewpoint_recorder.launch save_dir:=... base_dir:=...
 
 RECORD PLANS
-roslaunch moveit_recorder playback.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
+roslaunch moveit_recorder playback.launch save_dir:=...
 
 PROCESS VIDEOS
 roslaunch video_survey split_video.launch save_dir:=/home/amenon/icra2015survey/pr2_results/
@@ -44,3 +44,4 @@ roslaunch video_survey image_upload.launch token:=ya29.bwAYJHBXQMwUbxwAAADp_Sn-w
 roslaunch video_survey image_upload.launch token:=ya29.bwAYJHBXQMwUbxwAAADp_Sn-wLBL-ilQ11-PResvkoWD1sx76D-44Rsc6yQ3ig regex:=goalimg save_dir:=/home/amenon/icra2015survey/pr2_results
 
 CREATE SURVEY
+roslaunch video_survey experiment.launch save_dir:=$PWD control_dir:=/home/amenon/ros_workspace/src/moveit_recorder/control_final/results
